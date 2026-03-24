@@ -1,0 +1,21 @@
+<!--
+  - Copyright (C) 2025 Claude IME Contributors
+  - SPDX-License-Identifier: GPL-3.0-or-later
+  -->
+<resources>
+    <!-- Claude AI 相关字符串 -->
+    <string name="accessibility_service_name">Claude 输入法屏幕读取</string>
+    <string name="accessibility_service_description">允许输入法读取当前屏幕内容以提供智能补全建议。数据仅在本地处理，不会上传。</string>
+
+    <!-- 设置项 -->
+    <string name="claude_settings_title">Claude AI 设置</string>
+    <string name="claude_enable_ghost">启用幽灵补全</string>
+    <string name="claude_enable_ai">启用 AI 续写</string>
+    <string name="claude_api_url">本地 API 地址</string>
+    <string name="claude_model_name">模型名称</string>
+
+    <!-- 候选词标签 -->
+    <string name="candidate_source_memory">★</string>
+    <string name="candidate_source_ai">AI</string>
+    <string name="candidate_ghost_hint">Tab接受</string>
+</resources>

@@ -195,6 +195,10 @@ dependencies {
         artifact { type = "aar" }
     }
 
+    // Claude AI: HTTP client and JSON parsing
+    implementation(libs.okhttp)
+    implementation(libs.gson)
+
     // Testing
     testImplementation(libs.junit)
     testImplementation(libs.kotest.runner.junit5)
