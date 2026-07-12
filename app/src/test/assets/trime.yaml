@@ -22,10 +22,9 @@ style:
   candidate_use_cursor: true #高亮候選項
   candidate_view_height: 28 #候選區高度
   color_scheme: default #配色方案
-  comment_position: top
+  comment_position: right
   comment_font: comment.ttf #編碼提示字型
   comment_height: 12 #編碼提示區高度
-  comment_on_top: true #編碼提示在上方或右側
   comment_text_size: 12 #編碼提示字號
   hanb_font: hanb.ttf #擴充字型
   horizontal: true #水平模式
@@ -97,7 +96,7 @@ style:
   preview_offset: -12 #按鍵提示縱向偏移
   preview_text_size: 40 #按鍵提示字號
   proximity_correction: true #按鍵糾錯
-  reset_ascii_mode: false #顯示鍵盤時重置爲中文狀態
+  reset_ascii_mode_on_focus_change: false #焦点变更弹起输入法软键盘时，重置 ascii_mode
   round_corner: 8 #按鍵圓角半徑
   shadow_radius: 0.0 #按鍵陰影半徑
   speech_opencc_config: s2t.json #語音輸入簡繁轉換

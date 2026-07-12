@@ -13,14 +13,16 @@ style:
   auto_caps: false #自動句首大寫:true|false
   candidate_font: han.ttf #候選字型
   candidate_padding: 5 #候選項內邊距
-  candidate_spacing: 0.5 #候選間距
+  candidate_spacing: 0.0 #候选分割线
   candidate_text_size: 22 #候選字號
+  candidate_text_vertical_bias: 1.0 #候选文本垂直偏移位置（仅 overlay 模式使用，需要间隙空间足够，范围 0.0~1.0，0.0=top，0.5=center，1.0=bottom）
   candidate_view_height: 28 #候選區高度
   #candidate_corner_radius: 4 #候選項圓角半徑
   comment_font: comment.ttf #編碼提示字型
-  comment_height: 12 #編碼提示區高度
-  comment_on_top: true #編碼提示在上方或右側
-  comment_text_size: 12 #編碼提示字號
+  comment_height: 12 #编码提示区高度（仅 top 模式约束高度，其余模式与 candidate_view_height 无区别）
+  comment_position: right #编码提示布局位置：right / top / overlay
+  comment_vertical_bias: 0.0 #编码提示垂直偏移位置（仅 overlay 模式使用，需要间隙空间足够，范围 0.0~1.0，0.0=top，0.5=center，1.0=bottom）
+  comment_text_size: 10 #編碼提示字號
   hanb_font: hanb.ttf #擴充字型
   horizontal_gap: 1 #鍵水平間距
   keyboard_padding: 0 #竖屏模式下，屏幕左右两侧与键盘的距离（曲面屏减少误触）
@@ -43,7 +45,7 @@ style:
   preview_height: 60 #按鍵提示高度
   preview_offset: -12 #按鍵提示縱向偏移
   preview_text_size: 40 #按鍵提示字號
-  reset_ascii_mode: false #顯示鍵盤時重置爲中文狀態
+  reset_ascii_mode_on_focus_change: false #焦点变更弹起输入法软键盘时，重置 ascii_mode
   round_corner: 8 #按鍵圓角半徑
   shadow_radius: 0.0 #按鍵陰影半徑
   symbol_font: symbol.ttf #符號字型
@@ -77,6 +79,8 @@ window:               # 候选窗口（悬浮窗）参数
     horizontal: 4         # 横向内边距（整数）
 #  min_width: 0          # 最小宽度（整数）
 #  corner_radius: 0      # 圆角半径（浮点）
+#  border: 0             # 边框宽度（整数）
+#  shadow: 0.0           # 阴影半径（浮点）
 #  alpha: 1              # 透明度（0-1，浮点）
   foreground:           # 前景样式
     label_font_size: 20   # 序号字体大小（浮点）
@@ -914,7 +918,7 @@ preset_keys:
   liquid_keyboard_switch: { label: 更多, send: function, command: liquid_keyboard, option: "更多" }
   liquid_keyboard_exit: {label: 返回, send: function, command: liquid_keyboard, option: "-1"}  #退出liquidkeyboard
   liquid_keyboard_emoji: { label: 🙂, send: function, command: liquid_keyboard, option: "emoji" }
-  clipboard_window: { label: "剪贴", send: function, command: "clipboard_window" }
+  clipboard_window: { label: "剪贴", send: function, command: "clipboard_window", option: '0' } #0剪贴板，1收藏夹
   set_color_ink: { label: 切换到ink配色, send: function, command: set_color_scheme, option: "ink" }
   set_theme_ink: { label: 切换到ink主题, send: function, command: set_theme, option: "ink" } #空参数为刷新主题
   # trime設定
@@ -953,9 +957,9 @@ preset_keys:
   WebSearch: {label: 搜索網頁, command: web_search, option: "%4$s"} #搜索，其他view、dial、edit、search等intent，參考安卓的intent文檔：https://developer.android.com/reference/android/content/Intent.html
   Search: {label: 搜索, command: search, option: "%1$s"} #搜索短信、字典等
   Share: {label: 分享, command: send, option: "%s"} #分享指定文本: %s或者%1$s爲當前字符
-  Deploy: {label: 部署, send: function, command: apply, option: "DEPLOY"}
-  Sync: {label: 同步, send: function, command: apply, option: "SYNC_USER_DATA"}
-  RestartRime: {label: 重啟, send: function, command: apply, option: "RESTART_RIME"}
+  Deploy: {label: 部署, send: function, command: apply, option: "DEPLOY"} #重新部署
+  Sync: {label: 同步, send: function, command: apply, option: "SYNC_USER_DATA"} #用户资料同步
+  updateConfig: {label: 更新配置, send: function, command: apply, option: "UPDATE_CONFIG"} #更新配置文件
   RepeatCommit: { label: 重复,  command: commit, option: "%1$s" } #重复输入刚上屏的内容
 
 preset_keyboards:

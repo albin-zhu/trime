@@ -74,7 +74,7 @@ class KeyView(
 
     fun updateBounds() {
         val (x, y) = cachedLocation.also { getLocationInWindow(it) }
-        cachedBounds.set(x, y, x + width, y + height)
+        cachedBounds.set(x + key.extraWidthLeft, y, x + width - key.extraWidthRight, y + height)
         boundsValid = true
     }
 
@@ -103,9 +103,9 @@ class KeyView(
                     popup.listener.onPopupAction(triggerAction)
                     triggerAction.outAction?.let { action ->
                         keyboardActionListener.onAction(KeyAction(action))
-                        setPressedState(false)
                         dismissPopupPreview()
                     }
+                    setPressedState(false)
                 } else if (isRepeatable) {
                     key.getAction(KeyBehavior.CLICK)?.let { processKeyAction(it, KeyBehavior.CLICK) }
                 }
@@ -257,7 +257,8 @@ class KeyView(
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        val desiredWidth = key.width + paddingLeft + paddingRight
+        val totalWidth = key.width + key.extraWidthLeft + key.extraWidthRight
+        val desiredWidth = totalWidth + paddingLeft + paddingRight
         val desiredHeight = key.height + paddingTop + paddingBottom
 
         setMeasuredDimension(
@@ -328,7 +329,8 @@ class KeyView(
 
             val centerX = (width - paddingLeft - paddingRight) / 2f + paddingLeft
             val centerY = (height - paddingTop - paddingBottom) / 2f + paddingTop
-            val adjustmentY = (textPaint.textSize - textPaint.descent()) / 2f
+            val fontMetrics = textPaint.fontMetrics
+            val adjustmentY = -(fontMetrics.ascent + fontMetrics.descent) / 2f
 
             canvas.drawText(label, centerX + sp(key.keyTextOffsetX), centerY + adjustmentY + sp(key.keyTextOffsetY), textPaint)
         }
@@ -397,15 +399,22 @@ class KeyView(
                 typeface = FontManager.getTypeface("symbol_font")
             }
 
+            val lines = text.split("\n")
             val fontMetrics = symbolPaint.fontMetrics
+            val lineHeight = fontMetrics.descent - fontMetrics.ascent
+            val totalHeight = lineHeight * lines.size
+
             val centerX = (width - paddingLeft - paddingRight) / 2f + paddingLeft + sp(offsetX)
-            val centerY = if (isTop) {
-                paddingTop - fontMetrics.top + sp(offsetY)
+            val startY = if (isTop) {
+                paddingTop - fontMetrics.top + sp(offsetY) - (totalHeight - lineHeight) / 2
             } else {
-                height - paddingBottom - fontMetrics.bottom + sp(offsetY)
+                height - paddingBottom - fontMetrics.bottom + sp(offsetY) - (totalHeight - lineHeight) / 2
             }
 
-            canvas.drawText(text, centerX, centerY, symbolPaint)
+            for (i in lines.indices) {
+                val lineY = startY + lineHeight * i
+                canvas.drawText(lines[i], centerX, lineY, symbolPaint)
+            }
         }
     }
 }

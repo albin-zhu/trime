@@ -176,9 +176,14 @@ open class TrimeInputMethodService : LifecycleInputMethodService() {
             it.registerOnChangeListener(recreateInputViewListener)
         }
         prefs.candidates.registerOnChangeListener(recreateCandidatesViewListener)
-        ThemeManager.init(resources.configuration)
-        ThemeManager.addOnChangedListener(onThemeChangeListener)
-        ColorManager.addOnChangedListener(onColorChangeListener)
+        // ensure theme and color managers are initialized after rime is ready
+        lifecycleScope.launch {
+            rime.runOnReady {
+                ThemeManager.init(resources.configuration)
+                ThemeManager.addOnChangedListener(onThemeChangeListener)
+                ColorManager.addOnChangedListener(onColorChangeListener)
+            }
+        }
         InputFeedbackManager.init(this)
         registerReceiver()
         super.onCreate()
@@ -251,7 +256,7 @@ open class TrimeInputMethodService : LifecycleInputMethodService() {
                 }
             is RimeMessage.DeployMessage -> {
                 if (it.data == RimeMessage.DeployMessage.State.Success) {
-                    ThemeManager.selectTheme(ThemeManager.activeTheme.configId)
+                    ThemeManager.selectTheme(ThemeManager.prefs.selectedTheme.getValue())
                 }
             }
             else -> {}
@@ -281,6 +286,7 @@ open class TrimeInputMethodService : LifecycleInputMethodService() {
         navBarManager.evaluate(window.window!!)
         replaceInputView(theme)
         replaceCandidateView(theme)
+        inputView?.updateEnterKeyLabel(currentInputEditorInfo)
     }
 
     override fun onDestroy() {
@@ -910,7 +916,7 @@ open class TrimeInputMethodService : LifecycleInputMethodService() {
         }
     }
 
-    private fun updateComposingText(text: String) {
+    internal fun updateComposingText(text: String) {
         val ic = currentInputConnection ?: return
         ic.beginBatchEdit()
         if (composingText.isNotEmpty() || text.isNotEmpty()) {
